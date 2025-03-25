@@ -1,0 +1,85 @@
+﻿@model List<SubjectTopicsApp.Models.Topic>
+
+<h2>Manage Topics and Subtopics</h2>
+
+<!-- Form to Add a New Topic -->
+<form method="post" asp-action="AddTopic">
+    <input type="text" name="name" placeholder="Enter topic name" required />
+    <button type="submit">Add Topic</button>
+</form>
+
+<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+    <thead>
+        <tr>
+            <th>Topic Name</th>
+            <th>Actions</th>
+            <th>Subtopics</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var topic in Model)
+        {
+            <tr>
+                <!-- Topic Name -->
+                <td>@topic.Name</td>
+
+                <!-- Edit/Delete Topic -->
+                <td>
+                    <form method="post" asp-action="EditTopic" style="display: inline;">
+                        <input type="hidden" name="id" value="@topic.Id" />
+                        <input type="text" name="name" value="@topic.Name" required />
+                        <button type="submit">Edit</button>
+                    </form>
+
+                    <form method="post" asp-action="DeleteTopic" style="display: inline;">
+                        <input type="hidden" name="id" value="@topic.Id" />
+                        <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
+
+                <!-- Subtopics -->
+                <td>
+                    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Subtopic Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var subTopic in topic.SubTopics)
+                            {
+                                <tr>
+                                    <td>@subTopic.Name</td>
+                                    <td>
+                                        <form method="post" asp-action="EditSubTopic" style="display: inline;">
+                                            <input type="hidden" name="id" value="@subTopic.Id" />
+                                            <input type="text" name="name" value="@subTopic.Name" required />
+                                            <button type="submit">Edit</button>
+                                        </form>
+
+                                        <form method="post" asp-action="DeleteSubTopic" style="display: inline;">
+                                            <input type="hidden" name="id" value="@subTopic.Id" />
+                                            <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+
+                            <!-- Row for Adding a New Subtopic -->
+                            <tr>
+                                <td colspan="2">
+                                    <form method="post" asp-action="AddSubTopic">
+                                        <input type="hidden" name="topicId" value="@topic.Id" />
+                                        <input type="text" name="name" placeholder="Enter subtopic name" required />
+                                        <button type="submit">Add SubTopic</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
